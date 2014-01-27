@@ -1,4 +1,16 @@
 /*
+
+Update 666.01
+
+Gamby Bloc Drop Xtr3m update for foos
+
+Updates and fixes for the very familiar falling block game.
+
+By DWhacks, demonicpancake & Chiermaster
+
+
+
+
 BLOC DROP: A strangely familiar falling block game
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 by David Randall Stokes (gamby@logicalzero.com) 9/05/2012
