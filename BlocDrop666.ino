@@ -139,8 +139,8 @@ void loop() {
           movePiece(x+1, y, dir);
         else if (gamby.inputs & DPAD_DOWN)
           timeToDrop = 0;
-        else if (gamby.inputs & DPAD_UP)
-          timeToDrop = millis(); // HARD DROP. (0 might not be right tho, not sure if coordinate will just go at bottom or stop when reaching ) **DRU**1
+        //else if (gamby.inputs & DPAD_UP)
+         // timeToDrop = millis(); // HARD DROP. (0 might not be right tho, not sure if coordinate will just go at bottom or stop when reaching ) **DRU**1
         else if (gamby.inputs & BUTTON_2)
           rotate(ROTATE_CW);              //(btn Right) TURN CLOCKWIZE **DRU**
         else if (gamby.inputs & BUTTON_3)
@@ -190,8 +190,8 @@ void startGame() {
   // Draw the rest of the screen (the 'Next:' text, etc.)
   gamby.setPos(52,6);
   gamby.print("Score:");
-  gamby.setPos(52,7);
-  gamby.print(level);
+  gamby.setPos(52,7); 
+  gamby.print(score); //prints score to 0
   
   // Draw Level on the screen **DRU**6 DW moved to the middle
   gamby.setPos(52,4);
@@ -200,6 +200,8 @@ void startGame() {
   gamby.print(level);
   gamby.setPos(52,2);
   gamby.print("Cleared:");
+  gamby.setPos(52,3);
+  gamby.print(linesCleared);
   
   // 2. Reset some of the player variables
   score = 0;
@@ -406,9 +408,9 @@ void getScore(int c) {
 		  gamby.setPos(52,3); //This could be erased..LOL
 		  for (int t=0; t<1; t++) { //this too...
 			gamby.print("TETRIS");
-			delay(60);
+			delay(250);
 			gamby.print("");
-			delay(60);
+			delay(10);
 			}
                   break;
 	}
@@ -426,8 +428,8 @@ void getLevel() {
     if (currentLevel < level){
       gamby.setPos(52,5); //LEVELS !!! dw **DRU**7
       gamby.print(level, DEC);
-      dropSpeed -= 100;
+      dropSpeed = dropSpeed * .85;
+      dropSpeed += level/5;
     }
 }
-
 
