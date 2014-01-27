@@ -1,6 +1,6 @@
 /*
 
-Update 666.01
+Update 666.02
 
 Gamby Bloc Drop Xtr3m update for foos
 
@@ -39,8 +39,7 @@ unsigned int pieces[7][4] = {
   { 0x4700, 0x3220, 0x7100, 0x2260 }, // 'J'
   { 0x7400, 0x6220, 0x1700, 0x2230 }, // 'L'
   { 0x3300, 0x3300, 0x3300, 0x3300 }  // 2x2 square
-  //{ 0x8f80, 0xcc44, 0x1710, 0x44cc }  // SURPRISE **DRU**10
-};
+  };
  
 //////////////////////////////////////////////////////////////////////////////
 // The GambyBlockMode block palette.
