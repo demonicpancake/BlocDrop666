@@ -32,7 +32,7 @@ the scoring doesn't work correctly.
 // even though most are smaller. Since these are a 4x4 grid, they are stored as
 // 16b unsigned integers, just like blocks and GambyGraphicsMode fill patterns.
 unsigned int pieces[7][4] = {
-  { 0x720, 0x262, 0x4e0, 0x4640 }, // "T"  now its good DW **DRU**0
+  { 0x232, 0x720, 0x131, 0x270 }, // "T"  now its good DW **DRU**0
   { 0x2222, 0xf0, 0x4444, 0x0f00 }, // Bar
   { 0x2310, 0x3600, 0x2310, 0x3600 }, // 'S' zig-zag
   { 0x1320, 0x6300, 0x1320, 0x6300 }, // 'Z' zig-zag
@@ -169,8 +169,15 @@ void loop() {
 //
 void startGame() {
   byte i;
+  // 1. Reset some of the player variables
+  x = START_X;
+  y = START_Y;
+  dropSpeed = DEFAULT_SPEED; // dropspeed changes by 'level', DEFAULT_SPEED is the starting speed.
+  score = 0;
+  level = 0;
+  linesCleared = 0;
   
-  // 1. Draw the background
+  // 2. Draw the background
   gamby.clearScreen();
   
   // The vertical sides of the 'well'
@@ -202,13 +209,7 @@ void startGame() {
   gamby.setPos(52,3);
   gamby.print(linesCleared);
   
-  // 2. Reset some of the player variables
-  score = 0;
-  level = 0;
-  linesCleared = 0;  
-  x = START_X;
-  y = START_Y;
-  dropSpeed = DEFAULT_SPEED; // dropspeed changes by 'level', DEFAULT_SPEED is the starting speed.
+  
   playing = true; //game on!
   
   // 3. Add the first piece. 
@@ -348,8 +349,11 @@ void dropPiece() {
 	if (c > 0) { //Check if any lines are cleared
 		getScore(c); //If so, Score!.
 	}
+    tone(9,150);
     gamby.clearLine();
     addNewPiece();
+    delay(25);
+    noTone(9);
   }
   timeToDrop = millis() + dropSpeed;
 }
@@ -379,14 +383,18 @@ byte checkCompleteRows() {
         }
         gamby.setBlock(m, 0, 0);
       }
+      tone(9,300);
       cleared++;
       linesCleared++;
+      delay(20);
+      noTone(9);
     }
   }
   
   // Draw all the changes made with setBlock()
   gamby.update(1,0,WELL_WIDTH-1,WELL_BOTTOM-1);
   return cleared;
+  delay(500);
 }
 
 //
@@ -408,7 +416,13 @@ void getScore(int c) {
 		  gamby.setPos(52,3); //This could be erased..LOL
 		  for (int t=0; t<1; t++) { //this too...
 			gamby.print("TETRIS!");
-			delay(500);
+      tone(9, 250);
+			delay(50);
+      tone(9, 300);
+      delay(75);
+      tone(9, 370);
+      delay(375);
+      noTone(9);
 			gamby.print("");
 			delay(10);
 			}
@@ -416,9 +430,9 @@ void getScore(int c) {
 	}
     getLevel();
     gamby.setPos(52,7);
-    gamby.print(score, DEC);
+    gamby.print(score); //,DEC
     gamby.setPos(52,3);
-    gamby.print(linesCleared, DEC);
+    gamby.print(linesCleared); //,DEC
 }
 
 // Level up
@@ -427,7 +441,7 @@ void getLevel() {
     level = linesCleared / 10;
     if (currentLevel < level){
       gamby.setPos(52,5); //LEVELS !!! dw **DRU**7
-      gamby.print(level, DEC);
+      gamby.print(level); //,DEC
       dropSpeed = dropSpeed * .85; //A nice curve for speeding up. gets pretty fast around level 6.
       dropSpeed += level/5;
     }
