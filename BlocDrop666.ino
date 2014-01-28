@@ -1,6 +1,6 @@
 /*
 
-Update 666.01
+Update 666.02
 
 Gamby Bloc Drop Xtr3m update for foos
 
@@ -32,15 +32,14 @@ the scoring doesn't work correctly.
 // even though most are smaller. Since these are a 4x4 grid, they are stored as
 // 16b unsigned integers, just like blocks and GambyGraphicsMode fill patterns.
 unsigned int pieces[7][4] = {
-  { 0x0720, 0x2620, 0x2700, 0x4640 }, // "T"  now its good DW **DRU**0
-  { 0x2222, 0x0f00, 0x2222, 0x0f00 }, // Bar
+  { 0x720, 0x262, 0x4e0, 0x4640 }, // "T"  now its good DW **DRU**0
+  { 0x2222, 0xf0, 0x4444, 0x0f00 }, // Bar
   { 0x2310, 0x3600, 0x2310, 0x3600 }, // 'S' zig-zag
   { 0x1320, 0x6300, 0x1320, 0x6300 }, // 'Z' zig-zag
   { 0x4700, 0x3220, 0x7100, 0x2260 }, // 'J'
   { 0x7400, 0x6220, 0x1700, 0x2230 }, // 'L'
   { 0x3300, 0x3300, 0x3300, 0x3300 }  // 2x2 square
-  //{ 0x8f80, 0xcc44, 0x1710, 0x44cc }  // SURPRISE **DRU**10
-};
+  };
  
 //////////////////////////////////////////////////////////////////////////////
 // The GambyBlockMode block palette.
@@ -92,8 +91,8 @@ unsigned long timeToDrop;    // Time remaining (ms) before the piece drops a lev
 unsigned long dropSpeed;     // The speed of the drop, changes with skill level
 int score;          // The player's score
 int highScore;      // Self-explanatory
-int level;
-int linesCleared;
+int level;          // Level goes up every 10 lines cleared
+int linesCleared;    //obvious
 byte nextPiece;     // Index of the next piece to fall (see currentPiece)
 int pieceCount;     // The number of pieces that have fallen
  
@@ -139,8 +138,8 @@ void loop() {
           movePiece(x+1, y, dir);
         else if (gamby.inputs & DPAD_DOWN)
           timeToDrop = 0;
-        else if (gamby.inputs & DPAD_UP)
-          timeToDrop = millis(); // HARD DROP. (0 might not be right tho, not sure if coordinate will just go at bottom or stop when reaching ) **DRU**1
+        //else if (gamby.inputs & DPAD_UP)
+         // timeToDrop = millis(); // HARD DROP. (0 might not be right tho, not sure if coordinate will just go at bottom or stop when reaching ) **DRU**1
         else if (gamby.inputs & BUTTON_2)
           rotate(ROTATE_CW);              //(btn Right) TURN CLOCKWIZE **DRU**
         else if (gamby.inputs & BUTTON_3)
@@ -190,8 +189,8 @@ void startGame() {
   // Draw the rest of the screen (the 'Next:' text, etc.)
   gamby.setPos(52,6);
   gamby.print("Score:");
-  gamby.setPos(52,7);
-  gamby.print(level);
+  gamby.setPos(52,7); 
+  gamby.print(score); //prints score to 0
   
   // Draw Level on the screen **DRU**6 DW moved to the middle
   gamby.setPos(52,4);
@@ -199,7 +198,9 @@ void startGame() {
   gamby.setPos(52,5);
   gamby.print(level);
   gamby.setPos(52,2);
-  gamby.print("Cleared:");
+  gamby.print("Lines:");
+  gamby.setPos(52,3);
+  gamby.print(linesCleared);
   
   // 2. Reset some of the player variables
   score = 0;
@@ -207,8 +208,8 @@ void startGame() {
   linesCleared = 0;  
   x = START_X;
   y = START_Y;
-  dropSpeed = DEFAULT_SPEED; // todo: make this change by 'level'.
-  playing = true;
+  dropSpeed = DEFAULT_SPEED; // dropspeed changes by 'level', DEFAULT_SPEED is the starting speed.
+  playing = true; //game on!
   
   // 3. Add the first piece. 
   nextPiece = random(7);
@@ -256,6 +257,7 @@ void addNewPiece() {
  
   // Everything's good, so increment the total piece count.
   pieceCount++;
+
 }
  
  
@@ -405,10 +407,10 @@ void getScore(int c) {
 		  score += 1200 * (level+1);
 		  gamby.setPos(52,3); //This could be erased..LOL
 		  for (int t=0; t<1; t++) { //this too...
-			gamby.print("TETRIS");
-			delay(60);
+			gamby.print("TETRIS!");
+			delay(500);
 			gamby.print("");
-			delay(60);
+			delay(10);
 			}
                   break;
 	}
@@ -426,8 +428,8 @@ void getLevel() {
     if (currentLevel < level){
       gamby.setPos(52,5); //LEVELS !!! dw **DRU**7
       gamby.print(level, DEC);
-      dropSpeed -= 100;
+      dropSpeed = dropSpeed * .85; //A nice curve for speeding up. gets pretty fast around level 6.
+      dropSpeed += level/5;
     }
 }
-
 
