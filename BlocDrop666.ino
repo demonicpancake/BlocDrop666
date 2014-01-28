@@ -32,8 +32,8 @@ the scoring doesn't work correctly.
 // even though most are smaller. Since these are a 4x4 grid, they are stored as
 // 16b unsigned integers, just like blocks and GambyGraphicsMode fill patterns.
 unsigned int pieces[7][4] = {
-  { 0x0720, 0x2620, 0x2700, 0x4640 }, // "T"  now its good DW **DRU**0
-  { 0x2222, 0x0f00, 0x2222, 0x0f00 }, // Bar
+  { 0x720, 0x262, 0x4e0, 0x4640 }, // "T"  now its good DW **DRU**0
+  { 0x2222, 0xf0, 0x4444, 0x0f00 }, // Bar
   { 0x2310, 0x3600, 0x2310, 0x3600 }, // 'S' zig-zag
   { 0x1320, 0x6300, 0x1320, 0x6300 }, // 'Z' zig-zag
   { 0x4700, 0x3220, 0x7100, 0x2260 }, // 'J'
@@ -198,7 +198,7 @@ void startGame() {
   gamby.setPos(52,5);
   gamby.print(level);
   gamby.setPos(52,2);
-  gamby.print("Cleared:");
+  gamby.print("Lines:");
   gamby.setPos(52,3);
   gamby.print(linesCleared);
   
@@ -257,6 +257,7 @@ void addNewPiece() {
  
   // Everything's good, so increment the total piece count.
   pieceCount++;
+
 }
  
  
@@ -406,8 +407,8 @@ void getScore(int c) {
 		  score += 1200 * (level+1);
 		  gamby.setPos(52,3); //This could be erased..LOL
 		  for (int t=0; t<1; t++) { //this too...
-			gamby.print("TETRIS");
-			delay(250);
+			gamby.print("TETRIS!");
+			delay(500);
 			gamby.print("");
 			delay(10);
 			}
