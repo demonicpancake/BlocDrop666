@@ -91,8 +91,8 @@ unsigned long timeToDrop;    // Time remaining (ms) before the piece drops a lev
 unsigned long dropSpeed;     // The speed of the drop, changes with skill level
 int score;          // The player's score
 int highScore;      // Self-explanatory
-int level;
-int linesCleared;
+int level;          // Level goes up every 10 lines cleared
+int linesCleared;    //obvious
 byte nextPiece;     // Index of the next piece to fall (see currentPiece)
 int pieceCount;     // The number of pieces that have fallen
  
@@ -208,8 +208,8 @@ void startGame() {
   linesCleared = 0;  
   x = START_X;
   y = START_Y;
-  dropSpeed = DEFAULT_SPEED; // todo: make this change by 'level'.
-  playing = true;
+  dropSpeed = DEFAULT_SPEED; // dropspeed changes by 'level', DEFAULT_SPEED is the starting speed.
+  playing = true; //game on!
   
   // 3. Add the first piece. 
   nextPiece = random(7);
@@ -427,7 +427,7 @@ void getLevel() {
     if (currentLevel < level){
       gamby.setPos(52,5); //LEVELS !!! dw **DRU**7
       gamby.print(level, DEC);
-      dropSpeed = dropSpeed * .85;
+      dropSpeed = dropSpeed * .85; //A nice curve for speeding up. gets pretty fast around level 6.
       dropSpeed += level/5;
     }
 }
